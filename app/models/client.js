@@ -1,5 +1,9 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../utils/database').sequelize;
+const Coach = require('./coach');
+const NutritionTemplate = require('./nutritionTemplate');
+const WorkoutTemplate = require('./workoutTemplate');
+ 
 
 const Client = sequelize.define('Client', {
   name: {
@@ -43,8 +47,8 @@ const Client = sequelize.define('Client', {
     type: DataTypes.STRING
   }
 });
-Client.belongsTo(Coach, { foreignKey: 'coachId' });
-Client.belongsTo(NutritionTemplate, { foreignKey: 'nutritionTemplateId' });
-Client.belongsTo(WorkoutTemplate, { foreignKey: 'workoutTemplateId' });
+// Client.belongsTo(Coach, { foreignKey: 'coachId' });
+// Client.belongsTo(NutritionTemplate, { foreignKey: 'nutritionTemplateId' });
+// Client.belongsTo(WorkoutTemplate, { foreignKey: 'workoutTemplateId' });
 
 module.exports = Client;

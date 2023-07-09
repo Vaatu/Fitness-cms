@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../utils/database').sequelize;
 const Post = require('./post');
 
 const Like = sequelize.define('Like', {
@@ -9,6 +9,5 @@ const Like = sequelize.define('Like', {
   }
 });
 
-Like.belongsTo(Post, { foreignKey: 'postId' });
-
+// Like.belongsTo(Post, { foreignKey: 'postId' });
 module.exports = Like;

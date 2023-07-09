@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../utils/database').sequelize;
 const Day = require('./day');
 
 const Workout = sequelize.define('Workout', {
@@ -13,13 +13,23 @@ const Workout = sequelize.define('Workout', {
   setsCount: {
     type: DataTypes.INTEGER
   },
-  breakEstimation: {
+  repsCount: {
+    type: DataTypes.INTEGER
+  },
+
+  restTime: {
+    type: DataTypes.INTEGER
+  },
+    additionalNotes: {
+    type: DataTypes.TEXT
+  },
+  warmup: {
+    type: DataTypes.BOOLEAN
+  },
+    videoLink: {
     type: DataTypes.STRING
   }
 });
-const Day = require('./day');
-
-WorkoutTemplate.hasMany(Day, { foreignKey: 'workoutTemplateId' });
 
 
 module.exports = Workout;
