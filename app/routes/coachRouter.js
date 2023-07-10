@@ -742,7 +742,7 @@ const router = express.Router();
  *       500:
  *         description: Unable to assign the workout template to the client
  *
- * /coaches/{coachId}/clients/{clientId}/nutrition-template:
+ * /coaches/{coachId}/clients/{clientId}/nutrition-templates/{templateId}:
  *   delete:
  *     summary: Remove a nutrition template from a client
  *     tags: [Coaches]
@@ -750,24 +750,30 @@ const router = express.Router();
  *       - in: path
  *         name: coachId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: ID of the coach
+ *         description: The ID of the coach
  *       - in: path
  *         name: clientId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: ID of the client
+ *         description: The ID of the client
+ *       - in: path
+ *         name: templateId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the nutrition template to remove
  *     responses:
- *       204:
- *         description: No Content
+ *       200:
+ *         description: The nutrition template has been removed from the client successfully
  *       404:
- *         description: Coach or Client not found
+ *         description: Coach not found or Client not found
  *       500:
- *         description: Unable to remove the nutrition template from the client
+ *         description: Unable to remove nutrition template from client
  *
- * /coaches/{coachId}/clients/{clientId}/workout-template:
+ * /coaches/{coachId}/clients/{clientId}/workout-templates/{templateId}:
  *   delete:
  *     summary: Remove a workout template from a client
  *     tags: [Coaches]
@@ -775,22 +781,28 @@ const router = express.Router();
  *       - in: path
  *         name: coachId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: ID of the coach
+ *         description: The ID of the coach
  *       - in: path
  *         name: clientId
  *         schema:
- *           type: integer
+ *           type: string
  *         required: true
- *         description: ID of the client
+ *         description: The ID of the client
+ *       - in: path
+ *         name: templateId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the workout template to remove
  *     responses:
- *       204:
- *         description: No Content
+ *       200:
+ *         description: The workout template has been removed from the client successfully
  *       404:
- *         description: Coach or Client not found
+ *         description: Coach not found or Client not found
  *       500:
- *         description: Unable to remove the workout template from the client
+ *         description: Unable to remove workout template from client
  *
  * /coaches/{coachId}/clients/{clientId}/workout-templates:
  *   get:
