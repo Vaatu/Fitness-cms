@@ -2,6 +2,8 @@ const express = require('express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const coachRouter = require('./routes/coachRouter');
+const clientRouter = require('./routes/clientRouter');
+
 
 const sequelize = require('./utils/database').sequelize;
 // const associations = require('./associations');
@@ -22,7 +24,8 @@ const app = express();
 const port = 3000;
 
 Certificate.belongsTo(Coach, { foreignKey: 'coachId' });
-Client.belongsTo(Coach, { foreignKey: 'coachId' });
+// Client.belongsTo(Coach, { foreignKey: 'coachId' });
+Client.belongsToMany(Coach, { through: 'ClientCoach' });
 Client.belongsTo(NutritionTemplate, { foreignKey: 'nutritionTemplateId' });
 Client.belongsTo(WorkoutTemplate, { foreignKey: 'workoutTemplateId' });
 Coach.hasMany(Certificate, { foreignKey: 'coachId' });
@@ -71,6 +74,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
 app.use('/coaches', coachRouter);
+app.use('/clients', clientRouter);
 
 // Start the server
 app.listen(port, () => {
