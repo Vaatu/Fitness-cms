@@ -29,8 +29,8 @@ router.post('/:coachId/workout-templates', coachController.createWorkoutTemplate
 router.delete('/:coachId/workout-templates/:templateId', coachController.deleteWorkoutTemplate);
 
 // Routes for assigning templates to clients
-router.post('/:coachId/clients/:clientId/nutrition-templates/:templateId', coachController.assignNutritionTemplateToClient);
-router.post('/:coachId/clients/:clientId/workout-templates/:templateId', coachController.assignWorkoutTemplateToClient);
+router.post('/:coachId/clients/:clientId/nutrition-template/:templateId', coachController.assignNutritionTemplateToClient);
+router.post('/:coachId/clients/:clientId/workout-template/:templateId', coachController.assignWorkoutTemplateToClient);
 router.delete('/:coachId/clients/:clientId/nutrition-templates', coachController.removeNutritionTemplateFromClient);
 router.delete('/:coachId/clients/:clientId/workout-templates', coachController.removeWorkoutTemplateFromClient);
 

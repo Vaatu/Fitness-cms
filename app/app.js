@@ -28,6 +28,8 @@ Certificate.belongsTo(Coach, { foreignKey: 'coachId' });
 Client.belongsToMany(Coach, { through: 'ClientCoach' });
 Client.belongsTo(NutritionTemplate, { foreignKey: 'nutritionTemplateId' });
 Client.belongsTo(WorkoutTemplate, { foreignKey: 'workoutTemplateId' });
+Client.belongsToMany(WorkoutTemplate, { through: 'ClientWorkoutTemplate', foreignKey: 'clientId' });
+
 Coach.hasMany(Certificate, { foreignKey: 'coachId' });
 Coach.hasMany(Post, { foreignKey: 'coachId' });
 Coach.hasMany(Client, { foreignKey: 'coachId' });
@@ -44,6 +46,8 @@ Post.belongsTo(Coach, { foreignKey: 'coachId' });
 Post.hasMany(Comment, { foreignKey: 'postId' });
 Post.hasMany(Like, { foreignKey: 'postId' });
 WorkoutTemplate.hasMany(Day, { foreignKey: 'workoutTemplateId' });
+WorkoutTemplate.belongsToMany(Client, { through: 'ClientWorkoutTemplate', foreignKey: 'workoutTemplateId' });
+
 
 // sequelize.sync({ alter: true })
 //   .then(() => {

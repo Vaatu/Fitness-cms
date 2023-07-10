@@ -657,7 +657,7 @@
  * /coaches/{coachId}/workout-templates:
  *   get:
  *     summary: Get workout templates of a coach
- *     tags: [Coach Nutrition Templates]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -709,9 +709,9 @@
  *         description: Unable to create the workout template
  *
  * /coaches/{coachId}/clients/{clientId}/nutrition-template/{templateId}:
- *   put:
+ *   post:
  *     summary: Assign a nutrition template to a client
- *     tags: [Coach Workout Templates]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -740,7 +740,7 @@
  *         description: Unable to assign the nutrition template to the client
  *
  * /coaches/{coachId}/clients/{clientId}/workout-template/{templateId}:
- *   put:
+ *   post:
  *     summary: Assign a workout template to a client
  *     tags: [Coach Workout Templates]
  *     parameters:

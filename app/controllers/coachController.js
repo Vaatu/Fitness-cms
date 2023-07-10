@@ -7,6 +7,7 @@ const NutritionTemplate = require('../models/nutritionTemplate');
 const WorkoutTemplate = require('../models/workoutTemplate');
 const Workout = require('../models/workout');
 const Day = require('../models/day');
+const { log } = require('console');
 const sequelize = require('../utils/database').sequelize;
 
 
@@ -275,7 +276,6 @@ const createWorkoutTemplate = async (req, res) => {
 // Assign a nutrition template to a client
 const assignNutritionTemplateToClient = async (req, res) => {
   const { coachId, clientId, templateId } = req.params;
-
   try {
     const coach = await Coach.findByPk(coachId);
     if (!coach) {
@@ -294,6 +294,8 @@ const assignNutritionTemplateToClient = async (req, res) => {
 
     await client.addNutritionTemplate(nutritionTemplate);
 
+   
+
     res.status(200).json({ message: 'Nutrition template assigned to client successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Unable to assign nutrition template to client' });
@@ -303,7 +305,6 @@ const assignNutritionTemplateToClient = async (req, res) => {
 // Assign a workout template to a client
 const assignWorkoutTemplateToClient = async (req, res) => {
   const { coachId, clientId, templateId } = req.params;
-
   try {
     const coach = await Coach.findByPk(coachId);
     if (!coach) {
@@ -319,10 +320,14 @@ const assignWorkoutTemplateToClient = async (req, res) => {
     if (!workoutTemplate) {
       return res.status(404).json({ error: 'Workout template not found' });
     }
-
+    try {
     await client.addWorkoutTemplate(workoutTemplate);
 
-    res.status(200).json({ message: 'Workout template assigned to client successfully' });
+    }catch(e){
+      log(e);
+    }
+
+    res.status(200).json({ message: 'Workout template assigned to the client successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Unable to assign workout template to client' });
   }
