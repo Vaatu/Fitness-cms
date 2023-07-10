@@ -391,6 +391,36 @@
  *   name: Coaches
  *   description: Coach management APIs
  */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Coach Certificates
+ *   description: Coach Certificates management APIs
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Coach Posts
+ *   description: Coach Posts management APIs
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Coach Nutrition Templates
+ *   description: Coach Nutrition Templates management APIs
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Coach Workout Templates
+ *   description: Coach Coach Workout Templates management APIs
+ */
+
+
 /**
  * @swagger
  * /coaches:
@@ -498,7 +528,7 @@
  * /coaches/{coachId}/certificates:
  *   get:
  *     summary: Get certificates of a coach
- *     tags: [Coaches]
+ *     tags: [Coach Certificates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -524,7 +554,7 @@
  * /coaches/{coachId}/certificates:
  *   post:
  *     summary: Create a certificate for a coach
- *     tags: [Coaches]
+ *     tags: [Coach Certificates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -553,7 +583,7 @@
  * /coaches/{coachId}/posts:
  *   get:
  *     summary: Get posts of a coach
- *     tags: [Coaches]
+ *     tags: [Coach Posts]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -576,7 +606,7 @@
  * /coaches/{coachId}/nutrition-templates:
  *   get:
  *     summary: Get nutrition templates of a coach
- *     tags: [Coaches]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -598,7 +628,7 @@
  * 
  *   post:
  *     summary: Create a nutrition template for a coach
- *     tags: [Coaches]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -627,7 +657,7 @@
  * /coaches/{coachId}/workout-templates:
  *   get:
  *     summary: Get workout templates of a coach
- *     tags: [Coaches]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -652,7 +682,7 @@
  * /coaches/{coachId}/workout-templates:
  *   post:
  *     summary: Create a workout template for a coach
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -681,7 +711,7 @@
  * /coaches/{coachId}/clients/{clientId}/nutrition-template/{templateId}:
  *   put:
  *     summary: Assign a nutrition template to a client
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -712,7 +742,7 @@
  * /coaches/{coachId}/clients/{clientId}/workout-template/{templateId}:
  *   put:
  *     summary: Assign a workout template to a client
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -743,7 +773,7 @@
  * /coaches/{coachId}/clients/{clientId}/nutrition-templates/{templateId}:
  *   delete:
  *     summary: Remove a nutrition template from a client
- *     tags: [Coaches]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -774,7 +804,7 @@
  * /coaches/{coachId}/clients/{clientId}/workout-templates/{templateId}:
  *   delete:
  *     summary: Remove a workout template from a client
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -869,7 +899,7 @@
  * /coaches/{coachId}/nutrition-templates/{templateId}:
  *   delete:
  *     summary: Delete a nutrition template
- *     tags: [Coaches]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -894,7 +924,7 @@
  * /coaches/{coachId}/workout-templates/{templateId}:
  *   delete:
  *     summary: Delete a workout template
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -921,7 +951,7 @@
  * /workout-templates/{templateId}/days:
  *   post:
  *     summary: Insert a day into a workout template
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: templateId
@@ -958,7 +988,7 @@
  * /days/{dayId}/workouts:
  *   post:
  *     summary: Insert a workout into a day
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: dayId
