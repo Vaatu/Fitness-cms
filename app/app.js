@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const { swaggerUi, swaggerDocs } = require('./swagger');
+const authenticateUser = require('./middelwares/authenticationMiddelware');
 
 const coachRouter = require('./routes/coachRouter');
 const clientRouter = require('./routes/clientRouter');
@@ -23,6 +24,7 @@ associations(sequelize);
 // Middleware
 app.use(express.json());
 
+// app.use(authenticateUser);
 
 // Routes
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
