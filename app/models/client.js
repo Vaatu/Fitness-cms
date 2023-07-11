@@ -42,7 +42,6 @@ const Client = sequelize.define('Client', {
     type: DataTypes.STRING
   },
     // TODO: Run Alter To update to ENUM instead of String !!!!
-
   type: {
     type: DataTypes.ENUM('In-Person', 'Remote')
   },
