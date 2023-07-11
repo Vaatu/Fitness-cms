@@ -39,12 +39,18 @@
  *           description: The medical history of the client.
  *         gender:
  *           type: string
+ *           enum:
+ *             - Male
+ *             - Female 
  *           description: The gender of the client.
  *         phoneNumber:
  *           type: string
  *           description: The phone number of the client.
  *         type:
  *           type: string
+ *           enum:
+ *             - InPerson
+ *             - Remote
  *           description: The type of the client.
  *         profileImage:
  *           type: string
