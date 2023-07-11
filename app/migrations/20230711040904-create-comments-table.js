@@ -1,16 +1,17 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('WorkoutTemplates', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Comments', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      numberOfWeeks: {
-        type: Sequelize.INTEGER
+      text: {
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -22,7 +23,8 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('WorkoutTemplates');
+
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Comments');
   }
 };

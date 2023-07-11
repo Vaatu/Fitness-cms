@@ -1,7 +1,7 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Workouts', {
       id: {
         allowNull: false,
@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       subtitle: {
         type: Sequelize.STRING
@@ -18,11 +19,20 @@ module.exports = {
       setsCount: {
         type: Sequelize.INTEGER
       },
-      breakEstimation: {
-        type: Sequelize.STRING
-      },
-      dayId: {
+      repsCount: {
         type: Sequelize.INTEGER
+      },
+      restTime: {
+        type: Sequelize.INTEGER
+      },
+      additionalNotes: {
+        type: Sequelize.TEXT
+      },
+      warmup: {
+        type: Sequelize.BOOLEAN
+      },
+      videoLink: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -34,7 +44,8 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
+
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Workouts');
   }
 };

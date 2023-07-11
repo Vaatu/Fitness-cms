@@ -1,7 +1,7 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Days', {
       id: {
         allowNull: false,
@@ -18,12 +18,6 @@ module.exports = {
       additionalNotes: {
         type: Sequelize.TEXT
       },
-      videoLink: {
-        type: Sequelize.STRING
-      },
-      workoutTemplateId: {
-        type: Sequelize.INTEGER
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -34,7 +28,8 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
+
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Days');
   }
 };
