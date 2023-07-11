@@ -835,7 +835,7 @@
  * /coaches/{coachId}/clients/{clientId}/workout-templates:
  *   get:
  *     summary: Get workout templates of a client associated with a coach
- *     tags: [Coaches]
+ *     tags: [Coach Workout Templates]
  *     parameters:
  *       - in: path
  *         name: coachId
@@ -866,7 +866,7 @@
  * /coaches/{coachId}/clients/{clientId}/nutrition-templates:
  *   get:
  *     summary: Get nutrition templates of a client associated with a coach
- *     tags: [Coaches]
+ *     tags: [Coach Nutrition Templates]
  *     parameters:
  *       - in: path
  *         name: coachId

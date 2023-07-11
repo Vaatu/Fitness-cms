@@ -34,14 +34,17 @@ const Client = sequelize.define('Client', {
   medicalHistory: {
     type: DataTypes.TEXT
   },
+  // TODO: Run Alter To update to ENUM instead of String !!!!
   gender: {
-    type: DataTypes.STRING
+    type: DataTypes.ENUM('Male', 'Female')
   },
   phoneNumber: {
     type: DataTypes.STRING
   },
+    // TODO: Run Alter To update to ENUM instead of String !!!!
+
   type: {
-    type: DataTypes.STRING
+    type: DataTypes.ENUM('In-Person', 'Remote')
   },
   profileImage: {
     type: DataTypes.STRING

@@ -158,13 +158,13 @@ const createNutritionTemplate = async (req, res) => {
   const { coachId } = req.params;
   const { dayName, calories, protein, carb, fats, meals } = req.body;
   const transaction = await sequelize.transaction();
-  
+
   try {
     const coach = await Coach.findByPk(coachId);
     if (!coach) {
       return res.status(404).json({ error: 'Coach not found' });
     }
-  
+
     const nutritionTemplate = await NutritionTemplate.create({
       dayName,
       calories,
@@ -173,7 +173,7 @@ const createNutritionTemplate = async (req, res) => {
       fats,
       coachId,
     }, { transaction });
-  
+
     // Create associated meals
     const createdMeals = await Promise.all(meals.map(async (meal) => {
       return Meal.create({
@@ -184,13 +184,13 @@ const createNutritionTemplate = async (req, res) => {
         nutritionTemplateId: nutritionTemplate.id
       }, { transaction });
     }));
-  
+
     // Associate meals with nutrition template
     await nutritionTemplate.setMeals(createdMeals, { transaction });
-  
+
     // Commit the transaction
     await transaction.commit();
-  
+
     res.status(201).json(nutritionTemplate);
   } catch (error) {
     // Rollback the transaction if an error occurred
@@ -294,7 +294,7 @@ const assignNutritionTemplateToClient = async (req, res) => {
 
     await client.addNutritionTemplate(nutritionTemplate);
 
-   
+
 
     res.status(200).json({ message: 'Nutrition template assigned to client successfully' });
   } catch (error) {
@@ -320,12 +320,8 @@ const assignWorkoutTemplateToClient = async (req, res) => {
     if (!workoutTemplate) {
       return res.status(404).json({ error: 'Workout template not found' });
     }
-    try {
-    await client.addWorkoutTemplate(workoutTemplate);
 
-    }catch(e){
-      log(e);
-    }
+    await client.addWorkoutTemplate(workoutTemplate);
 
     res.status(200).json({ message: 'Workout template assigned to the client successfully' });
   } catch (error) {
@@ -387,14 +383,17 @@ const getClientWorkoutTemplates = async (req, res) => {
     if (!coach) {
       return res.status(404).json({ error: 'Coach not found' });
     }
-    const client = await Client.findOne({
-      where: { id: clientId, coachId },
+    // const client = await Client.findOne({
+    //   where: { id: clientId, coachId },
+    //   include: [{ model: WorkoutTemplate }],
+    // });
+    const client = await Client.findByPk(clientId, {
       include: [{ model: WorkoutTemplate }],
     });
     if (!client) {
       return res.status(404).json({ error: 'Client not found' });
     }
-    res.json(client.WorkoutTemplates);
+    res.json(await client.getWorkoutTemplates());
   } catch (error) {
     res.status(500).json({ error: 'Unable to fetch the workout templates of the client' });
   }
@@ -408,63 +407,63 @@ const getClientNutritionTemplates = async (req, res) => {
     if (!coach) {
       return res.status(404).json({ error: 'Coach not found' });
     }
-    const client = await Client.findOne({
-      where: { id: clientId, coachId },
-      include: [{ model: NutritionTemplate }],
-    });
+    const client = await Client.findByPk(
+     clientId,
+      {include: [{ model: NutritionTemplate }]}
+    );
     if (!client) {
       return res.status(404).json({ error: 'Client not found' });
     }
-    res.json(client.NutritionTemplates);
+    res.json(await client.getNutritionTemplates());
   } catch (error) {
     res.status(500).json({ error: 'Unable to fetch the nutrition templates of the client' });
   }
 
 };
 //---/
-  // Delete a nutrition template
-  const deleteNutritionTemplate = async (req, res) => {
-    const { coachId, templateId } = req.params;
-    try {
-      const coach = await Coach.findByPk(coachId);
-      if (!coach) {
-        return res.status(404).json({ error: 'Coach not found' });
-      }
-      const nutritionTemplate = await NutritionTemplate.findOne({
-        where: { id: templateId, coachId },
-      });
-      if (!nutritionTemplate) {
-        return res.status(404).json({ error: 'Nutrition template not found' });
-      }
-      await nutritionTemplate.destroy();
-      res.sendStatus(204);
-    } catch (error) {
-      res.status(500).json({ error: 'Unable to delete the nutrition template' });
+// Delete a nutrition template
+const deleteNutritionTemplate = async (req, res) => {
+  const { coachId, templateId } = req.params;
+  try {
+    const coach = await Coach.findByPk(coachId);
+    if (!coach) {
+      return res.status(404).json({ error: 'Coach not found' });
     }
-  };
-  
-  // Delete a workout template
-  const deleteWorkoutTemplate = async (req, res) => {
-    const { coachId, templateId } = req.params;
-    try {
-      const coach = await Coach.findByPk(coachId);
-      if (!coach) {
-        return res.status(404).json({ error: 'Coach not found' });
-      }
-      const workoutTemplate = await WorkoutTemplate.findOne({
-        where: { id: templateId, coachId },
-      });
-      if (!workoutTemplate) {
-        return res.status(404).json({ error: 'Workout template not found' });
-      }
-      await workoutTemplate.destroy();
-      res.sendStatus(204);
-    } catch (error) {
-      res.status(500).json({ error: 'Unable to delete the workout template' });
+    const nutritionTemplate = await NutritionTemplate.findOne({
+      where: { id: templateId, coachId },
+    });
+    if (!nutritionTemplate) {
+      return res.status(404).json({ error: 'Nutrition template not found' });
     }
-  };
+    await nutritionTemplate.destroy();
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Unable to delete the nutrition template' });
+  }
+};
 
-  // Insert a day into a workout template
+// Delete a workout template
+const deleteWorkoutTemplate = async (req, res) => {
+  const { coachId, templateId } = req.params;
+  try {
+    const coach = await Coach.findByPk(coachId);
+    if (!coach) {
+      return res.status(404).json({ error: 'Coach not found' });
+    }
+    const workoutTemplate = await WorkoutTemplate.findOne({
+      where: { id: templateId, coachId },
+    });
+    if (!workoutTemplate) {
+      return res.status(404).json({ error: 'Workout template not found' });
+    }
+    await workoutTemplate.destroy();
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Unable to delete the workout template' });
+  }
+};
+
+// Insert a day into a workout template
 const insertDayIntoWorkoutTemplate = async (req, res) => {
   try {
     const { templateId } = req.params;
@@ -536,7 +535,7 @@ const assignClientToCoach = async (req, res) => {
   }
 };
 
-  
+
 module.exports = {
   getAllCoaches,
   getCoachById,

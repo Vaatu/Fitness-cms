@@ -13,7 +13,7 @@ router.delete('/:id', clientController.deleteClient);
 router.get('/:id/coaches', clientController.getClientCoaches);
 
 // Routes for client workout templates
-router.get('/:id/workout-template', clientController.getClientWorkoutTemplate);
+router.get('/:id/workout-template', clientController.getClientWorkoutTemplates);
 
 // Routes for client nutrition templates
 router.get('/:id/nutrition-template', clientController.getClientNutritionTemplate);
