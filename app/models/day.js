@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../utils/database').sequelize;
 const Workout = require('./workout');
 
 const Day = sequelize.define('Day', {
@@ -12,11 +12,7 @@ const Day = sequelize.define('Day', {
   additionalNotes: {
     type: DataTypes.TEXT
   },
-  videoLink: {
-    type: DataTypes.STRING
-  }
 });
 
-Day.hasMany(Workout, { foreignKey: 'dayId' });
-
+// Day.hasMany(Workout, { foreignKey: 'dayId' });
 module.exports = Day;

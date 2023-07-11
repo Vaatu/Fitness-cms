@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database'); // Assuming you have a separate file for Sequelize configuration
+const sequelize = require('../utils/database').sequelize;
 const Coach = require('./coach');
 
 const Certificate = sequelize.define('Certificate', {
@@ -14,6 +14,7 @@ const Certificate = sequelize.define('Certificate', {
     type: DataTypes.STRING
   }
 });
-Certificate.belongsTo(Coach, { foreignKey: 'coachId' });
+// Certificate.belongsTo(Coach, { foreignKey: 'coachId' });
+
 
 module.exports = Certificate;
