@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/database').sequelize;
-const Workout = require('./workout');
 
 const Day = sequelize.define('Day', {
   subtitle: {
@@ -14,5 +13,4 @@ const Day = sequelize.define('Day', {
   },
 });
 
-// Day.hasMany(Workout, { foreignKey: 'dayId' });
 module.exports = Day;

@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/database').sequelize;
-const Day = require('./day');
 
 const Workout = sequelize.define('Workout', {
   title: {

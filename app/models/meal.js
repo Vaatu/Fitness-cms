@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/database').sequelize;
-const NutritionTemplate = require('./nutritionTemplate');
 
 const Meal = sequelize.define('Meal', {
   name: {
@@ -19,5 +18,4 @@ const Meal = sequelize.define('Meal', {
 
 });
 
-// Meal.belongsTo(NutritionTemplate, { foreignKey: 'nutritionTemplateId' });
 module.exports = Meal;
