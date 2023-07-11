@@ -1,8 +1,10 @@
 const express = require('express');
+require('dotenv').config();
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const coachRouter = require('./routes/coachRouter');
 const clientRouter = require('./routes/clientRouter');
+
 
 
 const sequelize = require('./utils/database').sequelize;

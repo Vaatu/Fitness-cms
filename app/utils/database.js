@@ -1,12 +1,16 @@
 const { Sequelize } = require('sequelize');
-
+const db = process.env.DB;
+const dbUsername = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
+const dbHost =  process.env.DB_HOST;
+const dbPort =  process.env.DB_PORT;
 // Database configuration
 const databaseConfig = {
-  database: 'fitness',
-  username: 'vaatu_akaunting',
-  password: 'wEDraZ+*l*HUj4Cho?=9',
-  host: '185.172.56.70',
-  port: '3306',
+  database: db,
+  username: dbUsername,
+  password: dbPassword,
+  host: dbHost,
+  port: dbPort,
   dialect: 'mysql',
 };
 
