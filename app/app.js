@@ -12,13 +12,13 @@ const sequelize = require('./utils/database').sequelize;
 const associations = require('./associations');
 associations(sequelize); // Pass the Sequelize instance to the associations function
 
-// sequelize.sync({ alter: false })
-//   .then(() => {
-//     console.log('Models synchronized with the database');
-//   })
-//   .catch((error) => {
-//     console.error('Error synchronizing models:', error);
-//   });
+sequelize.sync({ alter: process.env.DB_ALTER, force: process.env.DB_FORCE_DROP })
+  .then(() => {
+    console.log('Models synchronized with the database');
+  })
+  .catch((error) => {
+    console.error('Error synchronizing models:', error);
+  });
 
 // Middleware
 app.use(express.json());
