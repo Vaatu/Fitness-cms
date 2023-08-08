@@ -31,20 +31,20 @@ const authenticateUser = async (req, res, next) => {
     const userEmail = decodedToken.email;
 
     log(decodedToken);
-    try {
-      // Query the database to get the user data by email
-      const user = await Client.findOne({ where: { email: userEmail } });
-    
-      if (!user) {
-        // User not found in the database
-        return res.status(404).json({ message: 'User not found' });
-      }
-      req.userData = user;
-      
-    } catch(e){
-      return res.status(401).json({ message: 'User Fetch Error' });
+    // try {
+    //   // Query the database to get the user data by email
+    //   // const user = await Client.findOne({ where: { email: userEmail } });
+    //   if (!user) {
+    //     // User not found in the database
+    //     // return res.status(404).json({ message: 'User not found' });
+    //     // next();
+    //   }
+    //   req.userData = user;
 
-    }
+    // } catch(e){
+    //   return res.status(404).json({ message: 'User not found' });
+
+    // }
     // Proceed to the next middleware or route handler
     next();
   } catch (error) {

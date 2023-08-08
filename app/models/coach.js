@@ -15,6 +15,10 @@ const Coach = sequelize.define('Coach', {
   idImage: {
     type: DataTypes.STRING
   },
+  email: {
+    type: DataTypes.STRING,
+    unique : true
+  },
   phoneNumber: {
     type: DataTypes.STRING
   },

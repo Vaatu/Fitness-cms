@@ -12,6 +12,8 @@ const port = 3000;
 
 const sequelize = require('./utils/database').sequelize;
 const associations = require('./associations');
+const {testConnection} =  require('./utils/database');
+testConnection();
 associations(sequelize); 
 
 // sequelize.sync({ alter: process.env.DB_ALTER, force: process.env.DB_FORCE_DROP })
@@ -22,14 +24,14 @@ associations(sequelize);
 //     console.error('Error synchronizing models:', error);
 //   });
 
-// Middleware
+// Middleware 
 app.use(express.json());
 
 
 // Routes
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/auth/', authenticationRouter);
-app.use(authenticateUser);
+// app.use(authenticateUser);
 
 app.use('/coaches', coachRouter);
 app.use('/clients', clientRouter);

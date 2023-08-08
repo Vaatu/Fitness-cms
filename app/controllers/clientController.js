@@ -46,6 +46,11 @@ const createClient = async (req, res) => {
         // if (!workoutTemplate) {
         //   return res.status(404).json({ error: 'Workout template not found' });
         // }
+        // Check if the client with the provided email is already registered
+        const existingClient = await Client.findOne({ where: { email } });
+        if (existingClient) {
+            return res.status(409).json({ error: 'The client is already registered' });
+        }
         const client = await Client.create({
             name,
             birthday,
@@ -151,19 +156,19 @@ const getClientCoaches = async (req, res) => {
 const getClientWorkoutTemplates = async (req, res) => {
     const { id } = req.params;
     try {
-      const client = await Client.findByPk(id, {
-        include: [{ model: WorkoutTemplate }],
-      });
-      if (!client) {
-        return res.status(404).json({ error: 'Client not found' });
-      }
-      const workoutTemplates = await client.getWorkoutTemplates();
-      res.json(workoutTemplates);
+        const client = await Client.findByPk(id, {
+            include: [{ model: WorkoutTemplate }],
+        });
+        if (!client) {
+            return res.status(404).json({ error: 'Client not found' });
+        }
+        const workoutTemplates = await client.getWorkoutTemplates();
+        res.json(workoutTemplates);
     } catch (error) {
-      res.status(500).json({ error: 'Unable to fetch the workout templates of the client' });
+        res.status(500).json({ error: 'Unable to fetch the workout templates of the client' });
     }
-  };
-  
+};
+
 
 // Get the nutrition template assigned to a client
 const getClientNutritionTemplate = async (req, res) => {

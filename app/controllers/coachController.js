@@ -39,7 +39,7 @@ const getCoachById = async (req, res) => {
 
 // Create a new coach
 const createCoach = async (req, res) => {
-  const { name, image, idNumber, idImage, phoneNumber, bio } = req.body;
+  const { name, image, idNumber, idImage, phoneNumber, bio, email } = req.body;
   try {
     const coach = await Coach.create({
       name,
@@ -48,6 +48,7 @@ const createCoach = async (req, res) => {
       idImage,
       phoneNumber,
       bio,
+      email
     });
     res.status(201).json(coach);
   } catch (error) {
@@ -203,6 +204,7 @@ const createNutritionTemplate = async (req, res) => {
 const getCoachWorkoutTemplates = async (req, res) => {
   const { coachId } = req.params;
   try {
+    log('Hamada');
     const workoutTemplates = await WorkoutTemplate.findAll({
       where: { coachId },
       include: [
@@ -214,7 +216,7 @@ const getCoachWorkoutTemplates = async (req, res) => {
     });
     res.json(workoutTemplates);
   } catch (error) {
-    res.status(500).json({ error: 'Unable to fetch coach workout templates' });
+    res.status(500).json({ error: 'Unable to fetch coach workout templates', error: error.message });
   }
 };
 ///-----//
@@ -237,9 +239,11 @@ const createWorkoutTemplate = async (req, res) => {
     // Create days and workouts
     const createdDays = [];
     for (const dayData of days) {
-      const { dayName, workouts } = dayData;
+      const { subtitle,image, additionalNotes, workouts } = dayData;
       const day = await Day.create({
-        dayName,
+        subtitle,
+        image, 
+        additionalNotes,
         workoutTemplateId: workoutTemplate.id,
       });
 
@@ -258,7 +262,12 @@ const createWorkoutTemplate = async (req, res) => {
         })
       );
 
+      try {
       await day.setWorkouts(createdWorkouts);
+
+      }catch (e){
+        log("Create Day Error")
+      }
       createdDays.push({
         day,
         workouts: createdWorkouts,
