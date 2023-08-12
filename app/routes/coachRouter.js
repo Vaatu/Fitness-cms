@@ -38,4 +38,11 @@ router.delete('/:coachId/clients/:clientId/workout-templates', coachController.r
 router.get('/:coachId/clients/:clientId/workout-templates', coachController.getClientWorkoutTemplates);
 router.get('/:coachId/clients/:clientId/nutrition-templates', coachController.getClientNutritionTemplates);
 
+// Endpoint to assign a client to a coach
+router.post('/assign/:coachId/:clientId', coachController.assignClientToCoach);
+
+// Endpoint to unassign a client from a coach
+router.delete('/unassign-client/:coachId/:clientId', coachController.unassignClientFromCoach);
+
+
 module.exports = router;

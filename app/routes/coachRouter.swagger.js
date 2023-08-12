@@ -1027,4 +1027,150 @@
  *         description: Day not found
  *       '500':
  *         description: Unable to insert workout into day
+ * 
+ * 
+ * 
+ */
+
+/**
+*@swagger
+*paths:
+*  /coaches/{coachId}/clients/{clientId}/workout-templates:
+*    get:
+*      summary: Get workout templates of a client associated with a coach or from TempWorkoutTemplate.
+*      tags: [Coach Nutrition Templates]
+*      parameters:
+*        - name: coachId
+*          in: path
+*          required: true
+*          description: ID of the coach.
+*          schema:
+*            type: string
+*        - name: clientId
+*          in: path
+*          required: true
+*          description: ID of the client.
+*          schema:
+*            type: string
+*      responses:
+*        '200':
+*          description: Success
+*          content:
+*            application/json:
+*              example:
+*                - id: 1
+*                  title: Workout Template 1
+*                  subtitle: Subtitle 1
+*                  setsCount: 3
+*                  repsCount: 10
+*                  restTime: 60
+*                  additionalNotes: Additional notes
+*                  warmup: true
+*                  videoLink: https://example.com/video
+*                - id: 2
+*                  title: Workout Template 2
+*                  subtitle: Subtitle 2
+*                  setsCount: 4
+*                  repsCount: 8
+*                  restTime: 45
+*                  additionalNotes: Additional notes
+*                  warmup: false
+*                  videoLink: https://example.com/video
+*        '404':
+*          description: Coach or client not found
+*          content:
+*            application/json:
+*              example:
+*                error: Coach not found
+*        '500':
+*          description: Internal server error
+*          content:
+*            application/json:
+*              example:
+*                error: Unable to fetch the workout templates of the client
+*
+*  /api/coaches/{coachId}/clients/{clientId}/nutrition-templates:
+*    get:
+*      summary: Get nutrition templates of a client associated with a coach or from TempNutritionTemplate.
+*      tags: [Coach Nutrition Templates]
+*      parameters:
+*        - name: coachId
+*          in: path
+*          required: true
+*          description: ID of the coach.
+*          schema:
+*            type: string
+*        - name: clientId
+*          in: path
+*          required: true
+*          description: ID of the client.
+*          schema:
+*            type: string
+*      responses:
+*        '200':
+*          description: Success
+*          content:
+*            application/json:
+*              example:
+*                - id: 1
+*                  dayName: Day 1
+*                  calories: 2500
+*                  protein: 150
+*                  carb: 300
+*                  fats: 80
+*                  TempMeals:
+*                    - id: 1
+*                      name: Meal 1
+*                      weight: 200
+*                      mealType: Breakfast
+*                      description: Description 1
+*                    - id: 2
+*                      name: Meal 2
+*                      weight: 300
+*                      mealType: Lunch
+*                      description: Description 2
+*        '404':
+*          description: Coach or client not found
+*          content:
+*            application/json:
+*              example:
+*                error: Coach not found
+*        '500':
+*          description: Internal server error
+*          content:
+*            application/json:
+*              example:
+*                error: Unable to fetch the nutrition templates of the client
+*
+*/
+/**
+ * @swagger
+ * /coaches/unassign-client/{coachId}/{clientId}:
+ *   delete:
+ *     summary: Unassign a client from a coach
+ *     tags: [Coach Client Management]
+ *     parameters:
+ *       - in: path
+ *         name: coachId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         description: The ID of the coach
+ *       - in: path
+ *         name: clientId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           example: 2
+ *         description: The ID of the client
+ *     responses:
+ *       204:
+ *         description: Successfully unassigned the client from the coach
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Coach or client not found
+ *       500:
+ *         description: Unable to unassign the client from the coach
  */

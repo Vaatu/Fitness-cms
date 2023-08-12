@@ -41,6 +41,12 @@ const Client = sequelize.define('Client', {
   },
   profileImage: {
     type: DataTypes.STRING
+  },
+  profileImage: {
+    type: DataTypes.STRING
+  },
+  email: {
+    type: DataTypes.STRING
   }
 });
 

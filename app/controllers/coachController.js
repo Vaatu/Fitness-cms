@@ -7,6 +7,13 @@ const NutritionTemplate = require('../models/nutritionTemplate');
 const WorkoutTemplate = require('../models/workoutTemplate');
 const Workout = require('../models/workout');
 const Day = require('../models/day');
+
+const TempMeal = require('../models/tempMeal');
+const TempNutritionTemplate = require('../models/tempNutritionTemplate');
+const TempWorkoutTemplate = require('../models/tempWorkoutTemplate');
+const TempWorkout = require('../models/tempWorkout');
+const TempDay = require('../models/tempDay');
+
 const { log } = require('console');
 const sequelize = require('../utils/database').sequelize;
 
@@ -204,7 +211,6 @@ const createNutritionTemplate = async (req, res) => {
 const getCoachWorkoutTemplates = async (req, res) => {
   const { coachId } = req.params;
   try {
-    log('Hamada');
     const workoutTemplates = await WorkoutTemplate.findAll({
       where: { coachId },
       include: [
@@ -384,7 +390,30 @@ const removeWorkoutTemplateFromClient = async (req, res) => {
   }
 };
 
-// Get workout templates of a client associated with a coach
+// // Get workout templates of a client associated with a coach
+// const getClientWorkoutTemplates = async (req, res) => {
+//   const { coachId, clientId } = req.params;
+//   try {
+//     const coach = await Coach.findByPk(coachId);
+//     if (!coach) {
+//       return res.status(404).json({ error: 'Coach not found' });
+//     }
+//     // const client = await Client.findOne({
+//     //   where: { id: clientId, coachId },
+//     //   include: [{ model: WorkoutTemplate }],
+//     // });
+//     const client = await Client.findByPk(clientId, {
+//       include: [{ model: WorkoutTemplate }],
+//     });
+//     if (!client) {
+//       return res.status(404).json({ error: 'Client not found' });
+//     }
+//     res.json(await client.getWorkoutTemplates());
+//   } catch (error) {
+//     res.status(500).json({ error: 'Unable to fetch the workout templates of the client' });
+//   }
+// };
+// Get workout templates of a client associated with a coach or from TempWorkoutTemplate
 const getClientWorkoutTemplates = async (req, res) => {
   const { coachId, clientId } = req.params;
   try {
@@ -392,23 +421,126 @@ const getClientWorkoutTemplates = async (req, res) => {
     if (!coach) {
       return res.status(404).json({ error: 'Coach not found' });
     }
-    // const client = await Client.findOne({
-    //   where: { id: clientId, coachId },
-    //   include: [{ model: WorkoutTemplate }],
-    // });
+
     const client = await Client.findByPk(clientId, {
       include: [{ model: WorkoutTemplate }],
     });
+
     if (!client) {
       return res.status(404).json({ error: 'Client not found' });
     }
-    res.json(await client.getWorkoutTemplates());
+
+    // If the client is assigned to a coach, return their assigned workout templates
+    if (client.coachId == coachId) {
+      log("------"+client.coachId +" ------------------" + coachId+"-------------------------");
+      res.json(await client.getWorkoutTemplates());
+    } else {
+
+      // If the client is not assigned to a coach, return workout templates from TempWorkoutTemplate
+      const tempClient = await Client.findByPk(clientId, {
+        include: [
+          {
+            model: TempWorkoutTemplate,
+            include: [{ model: TempDay, include: [{ model: TempWorkout }] }],
+          },
+        ],
+      });
+
+      if (!tempClient) {
+        return res.status(404).json({ error: 'Client not found' });
+      }
+      
+
+      const tempWorkoutTemplates = await tempClient.getTempWorkoutTemplates();
+      const formattedWorkoutTemplates = [];
+  
+      for (const tempWorkoutTemplate of tempWorkoutTemplates) {
+        const formattedTemplate = {
+          id: tempWorkoutTemplate.id,
+          numberOfWeeks: tempWorkoutTemplate.numberOfWeeks,
+          createdAt: tempWorkoutTemplate.createdAt,
+          updatedAt: tempWorkoutTemplate.updatedAt,
+          coachId: tempWorkoutTemplate.coachId,
+          Days: [],
+        };
+  
+        for (const tempDay of await tempWorkoutTemplate.getTempDays()) {
+          // log("TEMP DAY: \n " + tempDay.toJSON());
+          const formattedDay = {
+            id: tempDay.id,
+            subtitle: tempDay.subtitle,
+            image: tempDay.image,
+            additionalNotes: tempDay.additionalNotes,
+            createdAt: tempDay.createdAt,
+            updatedAt: tempDay.updatedAt,
+            tempWorkoutTemplateId: tempDay.tempWorkoutTemplateId,
+            Workouts: [],
+          };
+          log(formattedDay);
+          const tempDayId = formattedDay.id;
+          const workoutTemplates = await TempWorkout.findAll({
+            where: { tempDayId },
+            // include: [
+            //   {
+            //     // model: TempDay,
+            //     // include: [{ model: TempWorkout }],
+            //   },
+            // ],
+          });
+          for (const tempWorkout of workoutTemplates) {
+            formattedDay.Workouts.push({
+              id: tempWorkout.id,
+              title: tempWorkout.title,
+              subtitle: tempWorkout.subtitle,
+              setsCount: tempWorkout.setsCount,
+              repsCount: tempWorkout.repsCount,
+              restTime: tempWorkout.restTime,
+              additionalNotes: tempWorkout.additionalNotes,
+              warmup: tempWorkout.warmup,
+              videoLink: tempWorkout.videoLink,
+              createdAt: tempWorkout.createdAt,
+              updatedAt: tempWorkout.updatedAt,
+              tempDayId: tempWorkout.tempDayId,
+            });
+          }
+  
+          formattedTemplate.Days.push(formattedDay);
+        }
+  
+        formattedWorkoutTemplates.push(formattedTemplate);
+      }
+  
+      res.json(formattedWorkoutTemplates);
+    }
   } catch (error) {
+    log(error);
     res.status(500).json({ error: 'Unable to fetch the workout templates of the client' });
   }
 };
 
-// Get nutrition templates of a client associated with a coach
+
+// // Get nutrition templates of a client associated with a coach
+// const getClientNutritionTemplates = async (req, res) => {
+//   const { coachId, clientId } = req.params;
+//   try {
+//     const coach = await Coach.findByPk(coachId);
+//     if (!coach) {
+//       return res.status(404).json({ error: 'Coach not found' });
+//     }
+//     const client = await Client.findByPk(
+//      clientId,
+//       {include: [{ model: NutritionTemplate }]}
+//     );
+//     if (!client) {
+//       return res.status(404).json({ error: 'Client not found' });
+//     }
+//     res.json(await client.getNutritionTemplates());
+//   } catch (error) {
+//     res.status(500).json({ error: 'Unable to fetch the nutrition templates of the client' });
+//   }
+// };
+
+// Get nutrition templates of a client associated with a coach or from TempNutritionTemplate
 const getClientNutritionTemplates = async (req, res) => {
   const { coachId, clientId } = req.params;
   try {
@@ -416,19 +548,49 @@ const getClientNutritionTemplates = async (req, res) => {
     if (!coach) {
       return res.status(404).json({ error: 'Coach not found' });
     }
-    const client = await Client.findByPk(
-     clientId,
-      {include: [{ model: NutritionTemplate }]}
-    );
+
+    const client = await Client.findByPk(clientId, {
+      include: [{ model: NutritionTemplate }],
+    });
+
     if (!client) {
       return res.status(404).json({ error: 'Client not found' });
     }
-    res.json(await client.getNutritionTemplates());
+
+    // If the client is assigned to a coach, return their assigned nutrition templates
+    if (client.coachId === coachId) {
+
+      res.json(await client.getNutritionTemplates());
+    } else {
+
+      // If the client is not assigned to a coach, return nutrition templates from TempNutritionTemplate
+      const tempClient = await Client.findByPk(clientId, {
+        include: [{ model: TempNutritionTemplate, include: [{ model: TempMeal }] }],
+      });
+
+      if (!tempClient) {
+        return res.status(404).json({ error: 'Client not found' });
+      }
+
+      const tempNutritionTemplates = tempClient.getTempNutritionTemplates();
+      const nutritionTemplates = [];
+
+      for (const tempNutritionTemplate of tempNutritionTemplates) {
+        const tempMeals = tempNutritionTemplate.getTempMeals();
+        nutritionTemplates.push({
+          ...tempNutritionTemplate.dataValues,
+          TempMeals: tempMeals,
+        });
+      }
+
+      res.json(nutritionTemplates);
+    }
   } catch (error) {
+    log(error);
     res.status(500).json({ error: 'Unable to fetch the nutrition templates of the client' });
   }
-
 };
+
 //---/
 // Delete a nutrition template
 const deleteNutritionTemplate = async (req, res) => {
@@ -544,6 +706,84 @@ const assignClientToCoach = async (req, res) => {
   }
 };
 
+const unassignClientFromCoach = async (req, res) => {
+  const { coachId, clientId } = req.params;
+  
+  try {
+    const coach = await Coach.findByPk(coachId);
+    if (!coach) {
+      return res.status(404).json({ error: 'Coach not found' });
+    }
+
+    const client = await Client.findByPk(clientId);
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+
+    // Unassign the client from the coach
+    await client.setCoaches(null);
+    client.coachId = null;
+    await client.save();
+
+    // Copy data from NutritionTemplate to TempNutritionTemplate
+    const nutritionTemplates = await client.getNutritionTemplates();
+    for (const nutritionTemplate of nutritionTemplates) {
+      const tempNutritionData = {
+        dayName: nutritionTemplate.dayName,
+        calories: nutritionTemplate.calories,
+        protein: nutritionTemplate.protein,
+        carb: nutritionTemplate.carb,
+        fats: nutritionTemplate.fats,
+        coachId: null, // You may want to set coachId to null if it was assigned before
+        clientId: clientId // Set clientId to null
+      };
+      await TempNutritionTemplate.create(tempNutritionData);
+    }
+
+    // Copy data from WorkoutTemplate to TempWorkoutTemplate and TempDay
+    const workoutTemplates = await client.getWorkoutTemplates();
+    for (const workoutTemplate of workoutTemplates) {
+      const tempWorkoutTemplate = await TempWorkoutTemplate.create({
+        numberOfWeeks: workoutTemplate.numberOfWeeks
+      });
+
+      const days = await workoutTemplate.getDays();
+      for (const day of days) {
+        const tempDay = await TempDay.create({
+          subtitle: day.subtitle,
+          image: day.image,
+          additionalNotes: day.additionalNotes,
+          tempWorkoutTemplateId: tempWorkoutTemplate.id
+        });
+
+        const workouts = await day.getWorkouts();
+        for (const workout of workouts) {
+          await TempWorkout.create({
+            title: workout.title,
+            subtitle: workout.subtitle,
+            setsCount: workout.setsCount,
+            repsCount: workout.repsCount,
+            restTime: workout.restTime,
+            additionalNotes: workout.additionalNotes,
+            warmup: workout.warmup,
+            videoLink: workout.videoLink,
+            tempDayId: day.id // Set dayId to the newly created TempDay's id
+          });
+        }
+        await tempWorkoutTemplate.addTempDay(tempDay);
+        await client.addTempWorkoutTemplate(tempWorkoutTemplate);
+
+      }
+    }
+    await client.setWorkoutTemplates(null);
+    await client.setNutritionTemplates(null);
+    res.sendStatus(204);
+  } catch (error) {
+    log(error);
+    res.status(500).json({ error: 'Unable to unassign the client from the coach' });
+  }
+};
+
 
 module.exports = {
   getAllCoaches,
@@ -568,5 +808,6 @@ module.exports = {
   deleteWorkoutTemplate,
   insertDayIntoWorkoutTemplate,
   insertWorkoutIntoDay,
-  assignClientToCoach
+  assignClientToCoach,
+  unassignClientFromCoach
 };

@@ -32,7 +32,7 @@ const getClientById = async (req, res) => {
 
 // Create a new client
 const createClient = async (req, res) => {
-    const { name, birthday, height, weight, weakness, strengths, injuries, goal, medicalHistory, gender, phoneNumber, type, profileImage, coachId, nutritionTemplateId, workoutTemplateId } = req.body;
+    const { name, birthday, height, weight, weakness, strengths, injuries, goal, medicalHistory, gender, phoneNumber, type, profileImage, coachId,email } = req.body;
     try {
         const coaches = await Coach.findByPk(coachId);
         if (!coaches) {
@@ -51,7 +51,8 @@ const createClient = async (req, res) => {
         if (existingClient) {
             return res.status(409).json({ error: 'The client is already registered' });
         }
-        const client = await Client.create({
+
+ const client = await Client.create({
             name,
             birthday,
             height,
@@ -65,12 +66,19 @@ const createClient = async (req, res) => {
             phoneNumber,
             type,
             profileImage,
-        })
+            email,
+            coachId
+        });
+        res.status(201).json(client);
+
+        
+       
         await client.addCoaches(coaches);
         // client.setNutritionTemplate(nutritionTemplate);
         // client.setWorkoutTemplate(workoutTemplate);
-        res.status(201).json(client);
     } catch (error) {
+        log(error);
+
         res.status(500).json({ error: 'Unable to create the client' });
     }
 };

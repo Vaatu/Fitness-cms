@@ -16,7 +16,7 @@ const {testConnection} =  require('./utils/database');
 testConnection();
 associations(sequelize); 
 
-// sequelize.sync({ alter: process.env.DB_ALTER, force: process.env.DB_FORCE_DROP })
+// sequelize.sync({ alter: process.env.DB_ALTER, force: true })
 //   .then(() => {
 //     console.log('Models synchronized with the database');
 //   })
